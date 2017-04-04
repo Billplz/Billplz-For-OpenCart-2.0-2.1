@@ -53,7 +53,7 @@ class ControllerPaymentBillplz extends Controller {
                 $data['email'] . $data['delivery'] . $data['callback_url'] . $data['redirect_url'] . $data['reference_1'] . $data['description']);
         $data['sha256'] = hash_hmac('sha256', $preparedString, $this->config->get('billplz_vkey'));
 
-        return $this->load->view('payment/billplz', $data);
+        return $this->load->view('default/template/payment/billplz.tpl', $data);
     }
 
     public function proceed() {
