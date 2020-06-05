@@ -10,8 +10,6 @@ class ControllerPaymentBillplz extends Controller
     {
         $this->load->language('payment/billplz');
 
-        $data['text_testmode'] = $this->language->get('text_testmode');
-
         $data = array(
             'button_confirm' => $this->language->get('button_confirm'),
             'is_sandbox' => $this->config->get('billplz_is_sandbox_value'),
