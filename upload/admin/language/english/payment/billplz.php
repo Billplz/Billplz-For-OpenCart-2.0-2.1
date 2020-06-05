@@ -35,6 +35,6 @@ $_['help_total'] = 'The checkout total the order must reach before this payment 
 
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify Billplz!';
-$_['error_api_key'] = '<b>Billplz API Key</b> Required!';
+$_['error_api_key'] = '<b>Billplz API Secret Key</b> Required!';
 $_['error_collection_id'] = '<b>Billplz Collection ID</b> Required!';
 $_['error_x_signature'] = '<b>Billplz X Signature Key</b> Required!';
