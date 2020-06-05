@@ -156,7 +156,7 @@ class ControllerPaymentBillplz extends Controller
 
         if ($order_info['order_status_id'] == $billplz_pending_status_id && !$bill_info['paid']) {
             if ($this->model_payment_billplz->markBillPaid($order_id, $bill_id)){
-                $this->model_checkout_order->addOrderHistory($order_id, $billplz_completed_status_id, "Status: Paid. Bill ID: $bill_id. Method: Redirect " , true, true);
+                $this->model_checkout_order->addOrderHistory($order_id, $billplz_completed_status_id, "Status: Paid. Bill ID: $bill_id. Method: Callback " , true, true);
             }
         }
 
