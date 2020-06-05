@@ -4,9 +4,6 @@ class ModelPaymentBillplz extends Model
 {
     public function getMethod($address, $total)
     {
-        if ($total < $this->config->get('billplz_minlimit')) {
-            return null;
-        }
         $this->load->language('payment/billplz');
 
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('billplz_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
@@ -18,6 +15,12 @@ class ModelPaymentBillplz extends Model
         } elseif ($query->num_rows) {
             $status = true;
         } else {
+            $status = false;
+        }
+
+        $currencies = array('MYR');
+
+        if (!in_array(strtoupper($this->currency->getCode()), $currencies)) {
             $status = false;
         }
 
@@ -33,5 +36,41 @@ class ModelPaymentBillplz extends Model
         }
 
         return $method_data;
+    }
+
+    public function insertBill($order_id, $slug) {
+      $qry = $this->db->query("INSERT INTO `" . DB_PREFIX . "billplz_bill` (`order_id`, `slug`) VALUES ('$order_id', '$slug')");  
+
+      if ($qry) {
+        return true;
+      }
+
+      $this->logger($qry);
+      return false;
+    }  
+
+    public function getBill($slug) {
+      $qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "billplz_bill` WHERE `slug` = '" . $slug . "' LIMIT 1");  
+
+      if ($qry->num_rows) {
+        return $qry->rows[0];
+      }
+      return false;
+    }  
+
+    public function markBillPaid($order_id, $slug) {
+      $qry = $this->db->query("UPDATE `" . DB_PREFIX . "billplz_bill` SET `paid` = '1' WHERE `order_id` = '$order_id' AND `slug` = '$slug' AND `paid` = '0'");  
+
+      if ($qry) {
+        return true;
+      }
+      return false;
+    }
+
+    public function logger($message) {
+        $log = new Log('billplz.log');
+        $backtrace = debug_backtrace();
+        $log->write('Origin: ' . $backtrace[1]['class'] . '::' . $backtrace[1]['function']);
+        $log->write(print_r($message, 1));
     }
 }
