@@ -17,6 +17,9 @@ class ControllerPaymentBillplz extends Controller
             'action' => $this->url->link('payment/billplz/proceed', '', true)
         );
 
+        if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/billplz.tpl')) {
+            return $this->load->view($this->config->get('config_template') . '/template/payment/billplz.tpl', $data);
+        }
         return $this->load->view('default/template/payment/billplz.tpl', $data);
     }
 
